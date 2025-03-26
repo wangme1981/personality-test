@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>性格密码测试系统 | 探索你的内在灵魂</title>
+    <style>
+        :root {
+            --primary-color: #6a3093;
+            --secondary-color: #a044ff;
+            --accent-color: #f46b45;
+            --dark-bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text-light: #e6e6e6;
+            --text-muted: #b8b8b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(106, 48, 147, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(244, 107, 69, 0.1) 0%, transparent 20%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        .test-container {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+        
+        .test-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+        }
+        
+        .instructions {
+            background-color: rgba(106, 48, 147, 0.2);
+            border-left: 4px solid var(--secondary-color);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .instructions p {
+            line-height: 1.6;
+        }
+        
+        .question-container {
+            margin-bottom: 2rem;
+        }
+        
+        .question {
+            background-color: rgba(22, 33, 62, 0.7);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(106, 48, 147, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .question:hover {
+            border-color: var(--secondary-color);
+            box-shadow: 0 5px 15px rgba(106, 48, 147, 0.2);
+        }
+        
+        .question-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .question-text {
+            display: inline;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        
+        .option {
+            flex: 0 0 48%;
+            position: relative;
+        }
+        
+        .option input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .option label {
+            display: block;
+            padding: 1rem;
+            background-color: rgba(106, 48, 147, 0.1);
+            border: 1px solid rgba(106, 48, 147, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .option label:hover {
+            background-color: rgba(106, 48, 147, 0.2);
+        }
+        
+        .option input:checked + label {
+            background-color: rgba(106, 48, 147, 0.4);
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(106, 48, 147, 0.5);
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 48, 147, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: rgba(106, 48, 147, 0.2);
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            height: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .result-container {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .result-animal {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .result-description {
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .result-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-top: 4px solid var(--secondary-color);
+        }
+        
+        .result-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(106, 48, 147, 0.5);
+            border-radius: 50%;
+            animation: float-particle 15s infinite linear;
+        }
+        
+        @keyframes float-particle {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .options {
+                flex-direction: column;
+            }
+            
+            .option {
+                flex: 1;
+                margin-bottom: 0.5rem;
+            }
+            
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <h1>性格密码测试系统</h1>
+            <p class="subtitle">探索你内在的灵魂动物，揭示真实的自我</p>
+        </header>
+        
+        <!-- 欢迎页面 -->
+        <div class="test-container" id="welcome-page">
+            <div class="section-title">测试前必读</div>
+            <div class="instructions">
+                <h3>重要提示</h3>
+                <p>本测试题目共四大题，每个大题有19道问题，每道题目有A、B两项，请按照您最真实的感受选择您喜欢的性格或行为。</p>
+                <p>最真实的感受是指您内心偏强烈的偏好、您最自然的反应、最自在的感觉、最舒服的感觉。</p>
+                <p>遇到比较矛盾的选项，请回忆理想状态下您最喜欢的方式，而非约束状态下、被要求状态下表现出的行为习惯。</p>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-primary" id="start-test">开始测试</button>
+            </div>
+        </div>
+        
+        <!-- 第一部分 -->
+        <div class="test-container hidden" id="section-1">
+            <div class="section-title">第一部分：认知方式</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-1"></div>
+            </div>
+            <div class="progress-text">完成进度: 0/19</div>
+            
+            <div class="question-container" id="questions-1">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-outline hidden" id="prev-1">上一页</button>
+                <button class="btn btn-primary" id="next-1">下一页</button>
+            </div>
+        </div>
+        
+        <!-- 第二部分 -->
+        <div class="test-container hidden" id="section-2">
+            <div class="section-title">第二部分：生活方式</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-2"></div>
+            </div>
+            <div class="progress-text">完成进度: 0/19</div>
+            
+            <div class="question-container" id="questions-2">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-outline" id="prev-2">上一页</button>
+                <button class="btn btn-primary" id="next-2">下一页</button>
+            </div>
+        </div>
+        
+        <!-- 第三部分 -->
+        <div class="test-container hidden" id="section-3">
+            <div class="section-title">第三部分：决策方式</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-3"></div>
+            </div>
+            <div class="progress-text">完成进度: 0/19</div>
+            
+            <div class="question-container" id="questions-3">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-outline" id="prev-3">上一页</button>
+                <button class="btn btn-primary" id="next-3">下一页</button>
+            </div>
+        </div>
+        
+        <!-- 第四部分 -->
+        <div class="test-container hidden" id="section-4">
+            <div class="section-title">第四部分：社交方式</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-4"></div>
+            </div>
+            <div class="progress-text">完成进度: 0/19</div>
+            
+            <div class="question-container" id="questions-4">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-outline" id="prev-4">上一页</button>
+                <button class="btn btn-primary" id="submit-test">查看结果</button>
+            </div>
+        </div>
+        
+        <!-- 结果页面 -->
+        <div class="test-container hidden" id="result-page">
+            <div class="result-container">
+                <div class="result-animal" id="result-animal">🦉</div>
+                <h2 class="result-title" id="result-title">你的性格密码是：猫头鹰</h2>
+                <p class="result-description" id="result-description">你是一个理性、逻辑性强的人，善于分析和思考问题...</p>
+                
+                <div class="result-grid">
+                    <div class="result-card">
+                        <h3>主性格</h3>
+                        <p id="primary-type">猫头鹰</p>
+                        <p id="primary-desc">理性、逻辑、分析型</p>
+                    </div>
+                    <div class="result-card">
+                        <h3>次性格</h3>
+                        <p id="secondary-type">骆驼</p>
+                        <p id="secondary-desc">稳定、有序、计划型</p>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" id="restart-test" style="margin-top: 2rem;">重新测试</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 测试问题数据（已根据2.0版Excel更新）
+const testData = {
+    section1: [
+        { optionA: "A. 比较着眼于未来、将来与愿景", optionB: "B. 比较重视现在、眼前与现实" },
+        { optionA: "A. 重视整体全局、比较见林不见树", optionB: "B. 重视局部细节、比较见树不见林" },
+        { optionA: "A. 注重联想、喜欢发现新的可能性", optionB: "B. 根据事实、不太喜欢凭空臆测" },
+        { optionA: "A. 喜欢与有创意、想象力的人交往", optionB: "B. 喜欢与务实、实际的人交往" },
+        { optionA: "A. 喜欢讨论新的观念与抽象理论", optionB: "B. 喜欢讨论实际经验与具体事物" },
+        { optionA: "A. 对于过去的记忆比较模糊", optionB: "B. 能够准确地回忆过去经验" },
+        { optionA: "A. 喜欢尝试更新更有效的好方法", optionB: "B. 喜欢把已被接受的方法运作更好" },
+        { optionA: "A. 喜欢用比喻、隐喻的方式沟通", optionB: "B. 讲话平铺直叙、不爱拐弯抹角" },
+        { optionA: "A. 善于洞察未被发现的机会", optionB: "B. 善于观察已发生的事" },
+        { optionA: "A. 喜欢使用创新与独特的做事方式", optionB: "B. 喜欢使用一般性与传统的方式" },
+        { optionA: "A. 喜欢研究、设计的构思性工作", optionB: "B. 喜欢生产或分配的具体性工作" },
+        { optionA: "A. 喜欢激发创意、非例行性的会议", optionB: "B. 喜欢实用性、例行性的会议" },
+        { optionA: "A. 喜欢处理概括、整体与全面性问题", optionB: "B. 喜欢处理具体、个别与单一性问题" },
+        { optionA: "A. 思考事情比较跳跃", optionB: "B. 思考一件事后再思考下一件事" },
+        { optionA: "A. 喜欢透过思考想象", optionB: "B. 喜欢实际亲身体验" },
+        { optionA: "A. 喜欢学习与锻炼新的技能", optionB: "B. 喜欢运用与琢磨既有的技能" },
+        { optionA: "A. 相信灵感与推理", optionB: "B. 相信确定与有形的事物" },
+        { optionA: "A. 把大方向都想好了，就代表事情做好一半以上了", optionB: "B. 把细节都做好，就代表事情做好一半以上了" },
+        { optionA: "A. 当我需要操作小细节时，我感到不开心", optionB: "B. 当我需要规划大方向时，我不知道从何规划起" }
+    ],
+    section2: [
+        { optionA: "A. 生活要有规则、秩序与计划", optionB: "B. 生活比较随性、自由与弹性" },
+        { optionA: "A. 约会时严守时间、要求准时", optionB: "B. 较为闲散不是很准时" },
+        { optionA: "A. 生活需有严谨的时间表与进度表", optionB: "B. 不需严谨的时间表、能完成就好" },
+        { optionA: "A. 有明确的方向、清楚的脉络可循", optionB: "B. 强调大的方向、有磋商的余地" },
+        { optionA: "A. 具有控制能力、办事有条有理", optionB: "B. 具有应变能力、办事灵活应变" },
+        { optionA: "A. 尽快做决定、让事情尘埃落定", optionB: "B. 缓慢做决定、考虑其它方案" },
+        { optionA: "A. 事先安排周详的日期、工作规划", optionB: "B. 较为自由、自在与权变" },
+        { optionA: "A. 生活场所保持整齐、井然有序", optionB: "B. 摆设比较不拘小节、乱中有序" },
+        { optionA: "A. 在期限之前尽早开工、尽快完工", optionB: "B. 在期限届满前一刻完成工作" },
+        { optionA: "A. 喜欢一次只做一件事且把事做完", optionB: "B. 喜欢同时做许多未完成的事情" },
+        { optionA: "A. 因为完成任务而感到满足", optionB: "B. 因为着手新事物而感到满足" },
+        { optionA: "A. 不喜偶发与出乎意料的事情发生", optionB: "B. 喜欢新鲜、出乎意料的惊喜" },
+        { optionA: "A. 要有好结果、必须要有好的过程", optionB: "B. 只要有好结果过程可以有弹性" },
+        { optionA: "A. 喜欢做出结论不易改变决定", optionB: "B. 喜欢搜集讯息不易做出决定" },
+        { optionA: "A. 决断前不需要考虑太多信息", optionB: "B. 决断前需要非常充分的信息" },
+        { optionA: "A. 做完决定后感到轻松愉快", optionB: "B. 因保留选择的余地而轻松愉快" },
+        { optionA: "A. 时间允许的话：先工作再玩", optionB: "B. 时间允许的话：先玩再工作" },
+        { optionA: "A. 自己定下的标准与目标，一定要做到", optionB: "B. 自己定下的标准与目标，可以依情况调整" },
+        { optionA: "A. 遇到变化，我难以适应", optionB: "B. 遇到变化，我很快适应" }
+    ],
+    section3: [
+        { optionA: "A. 用心、用情、强调将心比心", optionB: "B. 用脑、用理、强调就事论事" },
+        { optionA: "A. 对人对事通常先接受再怀疑", optionB: "B. 对人对事通常先怀疑再接受" },
+        { optionA: "A. 强调人际、比较对人不对事", optionB: "B. 强调事理、比较对事不对人" },
+        { optionA: "A. 我通常感情支配理智", optionB: "B. 我通常理智支配感情" },
+        { optionA: "A. 感性、价值、情绪的主观判断", optionB: "B. 理性、逻辑、推理的客观分析" },
+        { optionA: "A. 忽视缺点加以协助帮忙", optionB: "B. 发现缺点加以指正改进" },
+        { optionA: "A. 你是古道热肠、富同情心的人", optionB: "B. 你是头脑冷静、思考清晰的人" },
+        { optionA: "A. 我考虑的顺序是先情后理", optionB: "B. 我考虑的顺序是先理后情" },
+        { optionA: "A. 喜欢给一个同理心的安慰", optionB: "B. 喜欢做一个理智性的建议" },
+        { optionA: "A. 说话时:如果不和谐就尽量不说", optionB: "B. 该说就说、不太在乎不和谐" },
+        { optionA: "A. 喜欢感性、同情、和谐、合作", optionB: "B. 喜欢理性、公平、公正、竞争" },
+        { optionA: "A. 我比较喜欢动之以情", optionB: "B. 我比较喜欢说之以理" },
+        { optionA: "A. 着重感觉与人性来做决策", optionB: "B. 着重逻辑与思考来做决策" },
+        { optionA: "A. 比较设身处地思考事情", optionB: "B. 比较站在第三者的立场思考" },
+        { optionA: "A. 喜欢情感与亲密性交流", optionB: "B. 喜欢信息与知识性交流" },
+        { optionA: "A. 可能被认为过于感情化、无逻辑", optionB: "B. 可能被视为冷漠无情、不关心" },
+        { optionA: "A. 注重关系和睦、看到规则的例外", optionB: "B. 注重客观原则，有一致性的标准" },
+        { optionA: "A. 我会用大家可以接受的方式处理事情", optionB: "B. 我会用有效率的方式处理事情" },
+        { optionA: "A. 希望透过对话，让彼此关系更好", optionB: "B. 希望透过对话，获得更多知识与想法" }
+    ],
+    section4: [
+        { optionA: "A. 交友广阔、但交往程度不深", optionB: "B. 交友不广、但交往程度较深" },
+        { optionA: "A. 说的比听的多", optionB: "B. 听的比说的多" },
+        { optionA: "A. 主动找人谈话并带出话题", optionB: "B. 比较被动、等别人找你谈话" },
+        { optionA: "A. 花时间与外在的人事物打交道", optionB: "B. 花时间在内在的思想与计划" },
+        { optionA: "A. 容易与大家打成一片", optionB: "B. 个人喜欢安静而独立" },
+        { optionA: "A. 通常先说话再深思熟虑", optionB: "B. 通常先深思熟虑后再说话" },
+        { optionA: "A. 喜欢加入一群人中谈话", optionB: "B. 一次只喜欢与一个人谈话" },
+        { optionA: "A. 在团体中很容易认识别人", optionB: "B. 在团体中不容易认识别人" },
+        { optionA: "A. 喜欢与许多人一起工作", optionB: "B. 喜欢个人或少数人一起工作" },
+        { optionA: "A. 做事情注意力不会集中太久", optionB: "B. 能长时间专注同一个事情" },
+        { optionA: "A. 喜欢当面与人讲话沟通", optionB: "B. 喜欢笔写书信甚于口说" },
+        { optionA: "A. 喜欢与陌生人会面打交道", optionB: "B. 不喜欢与陌生人会面打交道" },
+        { optionA: "A. 讲话比较口不遮拦、后悔多说", optionB: "B. 讲话比较洗耳恭听、后悔少说" },
+        { optionA: "A. 观念要尽早说出与人分享", optionB: "B. 观念不成熟前不能过早与人分享" },
+        { optionA: "A. 可做即兴式的演讲与自由表达", optionB: "B. 演讲前要先准备完整题纲与预演" },
+        { optionA: "A. 喜欢成为众人注意的焦点", optionB: "B. 避免成为众人注意的焦点" },
+        { optionA: "A. 容易被了解，与众人分享个人信息", optionB: "B. 注重隐私，与少数人分享个人信息" },
+        { optionA: "A. 即时长时间的社交活动，我也不觉得厌烦", optionB: "B. 长时间的社交活动会让我精疲力竭" },
+        { optionA: "A. 遇到不熟的人，我很快就可以找到话题跟他聊", optionB: "B. 遇到不熟的人，我会担心找不到话题跟他聊" }
+    ]
+};
+
+        // 性格类型描述
+        const typeDescriptions = {
+            "海豚": {
+                emoji: "🐬",
+                description: "你是一个感性、富有同情心的人，善于理解他人的感受并建立深厚的人际关系。你重视和谐与合作，常常以情感为导向做出决策。",
+                traits: ["富有同情心", "情感导向", "和谐至上", "善于合作"]
+            },
+            "猫头鹰": {
+                emoji: "🦉",
+                description: "你是一个理性、逻辑性强的人，善于分析和思考问题。你重视事实和客观原则，常常以逻辑为导向做出决策。",
+                traits: ["理性分析", "逻辑导向", "客观公正", "善于思考"]
+            },
+            "骆驼": {
+                emoji: "🐫",
+                description: "你是一个稳定、有序的人，喜欢计划和结构。你重视规则和秩序，常常以系统化的方式处理事务。",
+                traits: ["稳定可靠", "计划导向", "有条不紊", "注重细节"]
+            },
+            "千里马": {
+                emoji: "🐎",
+                description: "你是一个灵活、适应性强的人，喜欢自由和变化。你重视自主性和创新，常常以灵活的方式应对各种情况。",
+                traits: ["灵活多变", "适应性强", "创新思维", "自由奔放"]
+            }
+        };
+
+        // 用户答案存储
+        const userAnswers = {
+            section1: Array(19).fill(null),
+            section2: Array(19).fill(null),
+            section3: Array(19).fill(null),
+            section4: Array(19).fill(null)
+        };
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 生成粒子效果
+            createParticles();
+            
+            // 生成所有问题
+            generateQuestions('section1', 'questions-1');
+            generateQuestions('section2', 'questions-2');
+            generateQuestions('section3', 'questions-3');
+            generateQuestions('section4', 'questions-4');
+            
+            // 事件监听
+            document.getElementById('start-test').addEventListener('click', function() {
+                document.getElementById('welcome-page').classList.add('hidden');
+                document.getElementById('section-1').classList.remove('hidden');
+            });
+            
+            // 导航按钮
+            document.getElementById('next-1').addEventListener('click', function() {
+                if (validateSection('section1')) {
+                    document.getElementById('section-1').classList.add('hidden');
+                    document.getElementById('section-2').classList.remove('hidden');
+                    updateProgress('section2', 'progress-2');
+                }
+            });
+            
+            document.getElementById('prev-2').addEventListener('click', function() {
+                document.getElementById('section-2').classList.add('hidden');
+                document.getElementById('section-1').classList.remove('hidden');
+            });
+            
+            document.getElementById('next-2').addEventListener('click', function() {
+                if (validateSection('section2')) {
+                    document.getElementById('section-2').classList.add('hidden');
+                    document.getElementById('section-3').classList.remove('hidden');
+                    updateProgress('section3', 'progress-3');
+                }
+            });
+            
+            document.getElementById('prev-3').addEventListener('click', function() {
+                document.getElementById('section-3').classList.add('hidden');
+                document.getElementById('section-2').classList.remove('hidden');
+            });
+            
+            document.getElementById('next-3').addEventListener('click', function() {
+                if (validateSection('section3')) {
+                    document.getElementById('section-3').classList.add('hidden');
+                    document.getElementById('section-4').classList.remove('hidden');
+                    updateProgress('section4', 'progress-4');
+                }
+            });
+            
+            document.getElementById('prev-4').addEventListener('click', function() {
+                document.getElementById('section-4').classList.add('hidden');
+                document.getElementById('section-3').classList.remove('hidden');
+            });
+            
+            document.getElementById('submit-test').addEventListener('click', function() {
+                if (validateSection('section4')) {
+                    calculateResult();
+                    document.getElementById('section-4').classList.add('hidden');
+                    document.getElementById('result-page').classList.remove('hidden');
+                }
+            });
+            
+            document.getElementById('restart-test').addEventListener('click', function() {
+                // 重置答案
+                for (let section in userAnswers) {
+                    userAnswers[section] = Array(19).fill(null);
+                }
+                
+                // 重置选择
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                
+                // 重置进度
+                document.querySelectorAll('.progress-bar').forEach(bar => {
+                    bar.style.width = '0%';
+                });
+                
+                document.querySelectorAll('.progress-text').forEach(text => {
+                    text.textContent = '完成进度: 0/19';
+                });
+                
+                // 回到欢迎页
+                document.getElementById('result-page').classList.add('hidden');
+                document.getElementById('welcome-page').classList.remove('hidden');
+            });
+        });
+
+        // 生成问题函数
+        function generateQuestions(section, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            testData[section].forEach((question, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.innerHTML = `
+                    <div class="question-number">${index + 1}</div>
+                    <div class="question-text">请选择最符合你的选项：</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="${section}-${index}-A" name="${section}-${index}" value="A" data-section="${section}" data-index="${index}" data-value="A">
+                            <label for="${section}-${index}-A">${question.optionA}</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="${section}-${index}-B" name="${section}-${index}" value="B" data-section="${section}" data-index="${index}" data-value="B">
+                            <label for="${section}-${index}-B">${question.optionB}</label>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(questionElement);
+                
+                // 添加事件监听
+                const radioA = document.getElementById(`${section}-${index}-A`);
+                const radioB = document.getElementById(`${section}-${index}-B`);
+                
+                radioA.addEventListener('change', function() {
+                    if (this.checked) {
+                        userAnswers[section][index] = 'A';
+                        updateProgress(section, `progress-${section.slice(-1)}`);
+                    }
+                });
+                
+                radioB.addEventListener('change', function() {
+                    if (this.checked) {
+                        userAnswers[section][index] = 'B';
+                        updateProgress(section, `progress-${section.slice(-1)}`);
+                    }
+                });
+                
+                // 恢复已选择的答案
+                if (userAnswers[section][index] === 'A') {
+                    radioA.checked = true;
+                } else if (userAnswers[section][index] === 'B') {
+                    radioB.checked = true;
+                }
+            });
+        }
+
+        // 更新进度条
+        function updateProgress(section, progressBarId) {
+            const answers = userAnswers[section];
+            const answeredCount = answers.filter(answer => answer !== null).length;
+            const totalQuestions = answers.length;
+            const percentage = (answeredCount / totalQuestions) * 100;
+            
+            document.getElementById(progressBarId).style.width = `${percentage}%`;
+            document.querySelector(`#${progressBarId.replace('progress', 'section')} .progress-text`).textContent = 
+                `完成进度: ${answeredCount}/${totalQuestions}`;
+        }
+
+        // 验证是否完成当前部分
+        function validateSection(section) {
+            const unanswered = userAnswers[section].some(answer => answer === null);
+            
+            if (unanswered) {
+                alert('请完成本部分所有问题后再继续');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // 计算结果
+        function calculateResult() {
+            // 计算每个部分的A和B数量
+            const counts = {
+                section1: { A: 0, B: 0 },
+                section2: { A: 0, B: 0 },
+                section3: { A: 0, B: 0 },
+                section4: { A: 0, B: 0 }
+            };
+            
+            for (let section in userAnswers) {
+                userAnswers[section].forEach(answer => {
+                    if (answer === 'A') counts[section].A++;
+                    if (answer === 'B') counts[section].B++;
+                });
+            }
+            
+            // 根据规则判断性格类型
+            let primaryType, secondaryType;
+            
+            if (counts.section1.A > counts.section1.B) {
+                // 第一大题A>B的情况
+                if (counts.section3.A > counts.section3.B) {
+                    primaryType = "海豚";
+                } else {
+                    primaryType = "猫头鹰";
+                }
+                
+                if (counts.section2.A > counts.section2.B) {
+                    secondaryType = "骆驼";
+                } else {
+                    secondaryType = "千里马";
+                }
+            } else {
+                // 第一大题A<B的情况
+                if (counts.section2.A > counts.section2.B) {
+                    primaryType = "骆驼";
+                } else {
+                    primaryType = "千里马";
+                }
+                
+                if (counts.section3.A > counts.section3.B) {
+                    secondaryType = "海豚";
+                } else {
+                    secondaryType = "猫头鹰";
+                }
+            }
+            
+            // 显示结果
+            document.getElementById('result-animal').textContent = typeDescriptions[primaryType].emoji;
+            document.getElementById('result-title').textContent = `你的性格密码是：${primaryType}`;
+            document.getElementById('result-description').textContent = typeDescriptions[primaryType].description;
+            
+            document.getElementById('primary-type').textContent = primaryType;
+            document.getElementById('primary-desc').textContent = typeDescriptions[primaryType].traits.join(" · ");
+            
+            document.getElementById('secondary-type').textContent = secondaryType;
+            document.getElementById('secondary-desc').textContent = typeDescriptions[secondaryType].traits.join(" · ");
+        }
+
+        // 创建粒子效果
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // 随机大小
+                const size = Math.random() * 5 + 3;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // 随机位置
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // 随机动画延迟
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                
+                // 随机透明度
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+    </script>
+</body>
+</html>
